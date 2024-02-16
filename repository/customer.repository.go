@@ -18,8 +18,15 @@ type customerRepo struct {
 }
 
 // AddCustomer implements CustomerRepo.
-func (customerRepo) AddCustomer(request.AddCustomer) (model.Customer, error) {
-	panic("unimplemented")
+func (c customerRepo) AddCustomer(req request.AddCustomer) (data model.Customer, err error) {
+	data = model.Customer{
+		Username: req.Username,
+		Password: req.Password,
+		Email:    req.Email,
+		Name:     req.Email,
+	}
+
+	return data, c.DB.Create(&data).Error
 }
 
 func NewCustomerRepo(db *gorm.DB) CustomerRepo {
@@ -28,7 +35,7 @@ func NewCustomerRepo(db *gorm.DB) CustomerRepo {
 	}
 }
 
-func (u customerRepo) Migrate() error {
+func (c customerRepo) Migrate() error {
 	log.Print("[CustomerRepository]...Migrate")
-	return u.DB.AutoMigrate(&model.Customer{})
+	return c.DB.AutoMigrate(&model.Customer{})
 }
