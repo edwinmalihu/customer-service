@@ -11,10 +11,16 @@ import (
 type CustomerRepo interface {
 	Migrate() error
 	AddCustomer(request.AddCustomer) (model.Customer, error)
+	UserLogin(request.Login) (model.Customer, error)
 }
 
 type customerRepo struct {
 	DB *gorm.DB
+}
+
+// UserLogin implements CustomerRepo.
+func (c customerRepo) UserLogin(req request.Login) (data model.Customer, err error) {
+	return data, c.DB.First(&data, "username=?", req.Username).Error
 }
 
 // AddCustomer implements CustomerRepo.

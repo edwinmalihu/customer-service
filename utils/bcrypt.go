@@ -11,3 +11,16 @@ func HashPassword(pass *string) {
 	datapass := fmt.Sprintf("%x", hPass)
 	*pass = string(datapass)
 }
+
+func ComparePassword(dbPass, pass string) bool {
+	verify := false
+
+	if dbPass == pass {
+		verify = true
+	} else {
+		verify = false
+	}
+
+	return verify
+
+}

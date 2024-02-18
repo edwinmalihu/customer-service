@@ -14,6 +14,7 @@ import (
 
 type CustomerController interface {
 	AddCustomer(enforcer *casbin.Enforcer) gin.HandlerFunc
+	LoginUser(*gin.Context)
 }
 
 type customerController struct {
@@ -51,4 +52,34 @@ func (h customerController) AddCustomer(enforcer *casbin.Enforcer) gin.HandlerFu
 
 		ctx.JSON(http.StatusOK, res)
 	}
+}
+
+func (h customerController) LoginUser(ctx *gin.Context) {
+	var req request.Login
+
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+
+	dbUser, err := h.custRepo.UserLogin(req)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, "Informasi yang anda masukan salah")
+		return
+
+	}
+
+	password := fmt.Sprintf("%s%s", req.Username, req.Password)
+	utils.HashPassword(&password)
+	isTrue := utils.ComparePassword(dbUser.Password, password)
+	if !isTrue {
+		ctx.JSON(http.StatusInternalServerError, "Informasi yang anda masukan salah")
+		return
+	}
+
+	res := response.LoginResponse{
+		Username: dbUser.Username,
+		Msg:      "Login Success",
+	}
+
+	ctx.JSON(http.StatusOK, res)
 }

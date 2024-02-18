@@ -5,3 +5,8 @@ type SuccessAddCustomer struct {
 	Password string `json:"password"`
 	Email    string `json:"email" binding:"required,email`
 }
+
+type LoginResponse struct {
+	Username string `json:"username"`
+	Msg      string `json:messege`
+}
