@@ -59,6 +59,7 @@ func (h customerController) LoginUser(ctx *gin.Context) {
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
 	dbUser, err := h.custRepo.UserLogin(req)

@@ -48,6 +48,7 @@ func SetupRoutes(db *gorm.DB) {
 
 	{
 		apiRoutes.POST("/add", customerController.AddCustomer(enforcer))
+		apiRoutes.POST("/login", customerController.LoginUser)
 	}
 
 	//httpRouter.Run(fmt.Sprintf(":%s", os.Getenv("SERVER_PORT")))
