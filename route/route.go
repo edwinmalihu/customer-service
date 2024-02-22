@@ -6,6 +6,7 @@ import (
 	"customer-service/repository"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/casbin/casbin/v2"
 
@@ -51,6 +52,6 @@ func SetupRoutes(db *gorm.DB) {
 		apiRoutes.POST("/login", customerController.LoginUser)
 	}
 
-	//httpRouter.Run(fmt.Sprintf(":%s", os.Getenv("SERVER_PORT")))
-	httpRouter.Run(":8082")
+	httpRouter.Run(fmt.Sprintf(":%s", os.Getenv("SERVER_PORT")))
+	//httpRouter.Run(":8082")
 }
